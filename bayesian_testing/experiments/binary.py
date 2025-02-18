@@ -75,7 +75,7 @@ class BinaryDataTest(BaseDataTest):
         res_pbbs = dict(zip(self.variant_names, pbbs))
         res_loss = dict(zip(self.variant_names, loss))
         res_intervals = dict(zip(self.variant_names, intervals))
-        res_hdis =  = dict(zip(self.variant_names, intervals))
+        res_hdis =  = dict(zip(self.variant_names, hdis))
 
         return res_pbbs, res_loss, res_intervals, res_hdis
 
