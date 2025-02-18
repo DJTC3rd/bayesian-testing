@@ -182,7 +182,7 @@ def eval_bernoulli_agg(
     res_intervals = estimate_credible_intervals(beta_samples, interval_alpha)
     res_hdis = estimate_hdi(beta_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, beta_samples
 
 
 def eval_normal_agg(
@@ -262,7 +262,7 @@ def eval_normal_agg(
     res_intervals = estimate_credible_intervals(normal_samples, interval_alpha)
     res_hdis = estimate_hdi(normal_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, normal_samples
 
 
 def eval_delta_lognormal_agg(
@@ -364,7 +364,7 @@ def eval_delta_lognormal_agg(
         res_intervals = estimate_credible_intervals(combined_samples, interval_alpha)
         res_hdis = estimate_hdi(combined_samples, interval_alpha)
 
-        return res_pbbs, res_loss, res_intervals, res_hdis
+        return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples
 
 
 def eval_numerical_dirichlet_agg(
@@ -421,7 +421,7 @@ def eval_numerical_dirichlet_agg(
     res_intervals = estimate_credible_intervals(means_samples, interval_alpha)
     res_hdis = estimate_hdi(means_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, means_samples
 
 
 
@@ -475,7 +475,7 @@ def eval_poisson_agg(
     res_intervals = estimate_credible_intervals(gamma_samples, interval_alpha)
     res_hdis = estimate_hdi(gamma_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, gamma_samples
 
 
 
@@ -578,7 +578,7 @@ def eval_delta_normal_agg(
         res_intervals = estimate_credible_intervals(combined_samples, interval_alpha)
         res_hdis = estimate_hdi(combined_samples, interval_alpha)
 
-        return res_pbbs, res_loss, res_intervals, res_hdis
+        return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples
 
 
 def eval_exponential_agg(
@@ -634,7 +634,7 @@ def eval_exponential_agg(
     res_intervals = estimate_credible_intervals(gamma_samples, interval_alpha)
     res_hdis = estimate_hdi(gamma_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, gamma_samples
 
 
 def eval_delta_exponential_agg(
@@ -704,4 +704,4 @@ def eval_delta_exponential_agg(
     res_intervals = estimate_credible_intervals(combined_samples, interval_alpha)
     res_hdis = estimate_hdi(combined_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis
+    return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples

@@ -62,7 +62,7 @@ class ExponentialDataTest(BaseDataTest):
         res_loss : Dictionary with expected loss for all variants in experiment.
         res_intervals : Dictionary with quantile-based credible intervals for all variants.
         """
-        pbbs, loss, intervals, hdis = eval_exponential_agg(
+        pbbs, loss, intervals, hdis, posterior_samples = eval_exponential_agg(
             self.totals,
             self.sum_values,
             self.a_priors,
@@ -76,8 +76,9 @@ class ExponentialDataTest(BaseDataTest):
         res_loss = dict(zip(self.variant_names, loss))
         res_intervals = dict(zip(self.variant_names, intervals))
         res_hdis = dict(zip(self.variant_names, hdis))
+        res_posterior= dict(zip(self.variant_names, posterior_samples))
 
-        return res_pbbs, res_loss, res_intervals, res_hdis
+        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior
 
     def evaluate(
         self,
@@ -110,20 +111,22 @@ class ExponentialDataTest(BaseDataTest):
             "high_density_intervals",
             "prob_being_best",
             "expected_loss",
+            "posterior_samples"
         ]
         observed_average = [round(i[0] / i[1], 5) for i in zip(self.sum_values, self.totals)]
         posterior_mean = [
             round((i[3] + i[1]) / (i[2] + i[0]), 5)
             for i in zip(self.totals, self.sum_values, self.a_priors, self.b_priors)
         ]
-        eval_pbbs, eval_loss, eval_intervals, eval_hdis = self.eval_simulation(
+        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior = self.eval_simulation(
             sim_count, seed, min_is_best, interval_alpha
         )
         pbbs = list(eval_pbbs.values())
         loss = list(eval_loss.values())
         intervals = list(eval_intervals.values())
         hdis = list(eval_hdis.values())
-        
+        posterior_samples = list(eval_posterior.values())
+
         data = [
             self.variant_names,
             self.totals,
@@ -134,6 +137,7 @@ class ExponentialDataTest(BaseDataTest):
             hdis,
             pbbs,
             loss,
+            posterior_samples
         ]
         res = [dict(zip(keys, item)) for item in zip(*data)]
 

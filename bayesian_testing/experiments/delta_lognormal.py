@@ -96,7 +96,7 @@ class DeltaLognormalDataTest(BaseDataTest):
         res_loss : Dictionary with expected loss for all variants in experiment.
         res_intervals : Dictionary with quantile-based credible intervals for all variants.
         """
-        pbbs, loss, intervals, hdis = eval_delta_lognormal_agg(
+        pbbs, loss, intervals, hdis, posterior_samples = eval_delta_lognormal_agg(
             self.totals,
             self.positives,
             self.sum_logs,
@@ -116,8 +116,9 @@ class DeltaLognormalDataTest(BaseDataTest):
         res_loss = dict(zip(self.variant_names, loss))
         res_intervals = dict(zip(self.variant_names, intervals))
         res_hdis= dict(zip(self.variant_names, hdis))
+        res_posterior= dict(zip(self.variant_names, posterior_samples))
 
-        return res_pbbs, res_loss, res_intervals, res_hdis
+        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior
 
     def evaluate(
         self,
@@ -192,13 +193,15 @@ class DeltaLognormalDataTest(BaseDataTest):
                 b_posterior_ig,
             )
         ]
-        eval_pbbs, eval_loss, eval_intervals, eval_hdis = self.eval_simulation(
+        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posteriors = self.eval_simulation(
             sim_count, seed, min_is_best, interval_alpha
         )
         pbbs = list(eval_pbbs.values())
         loss = list(eval_loss.values())
         intervals = list(eval_intervals.values())
         hdis = list(eval_hdis.values())
+        posterior_samples = list(eval_posterior.values())
+
         data = [
             self.variant_names,
             self.totals,
@@ -211,6 +214,7 @@ class DeltaLognormalDataTest(BaseDataTest):
             hdis,
             pbbs,
             loss,
+            posterior_samples
         ]
         res = [dict(zip(keys, item)) for item in zip(*data)]
 
