@@ -200,7 +200,7 @@ class DeltaLognormalDataTest(BaseDataTest):
         loss = list(eval_loss.values())
         intervals = list(eval_intervals.values())
         hdis = list(eval_hdis.values())
-        posterior_samples = list(eval_posterior.values())
+        posterior_samples = list(eval_posteriors.values())
 
         data = [
             self.variant_names,
