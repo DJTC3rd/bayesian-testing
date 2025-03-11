@@ -108,7 +108,7 @@ class ExponentialDataTest(BaseDataTest):
             "observed_average",
             "posterior_mean",
             "credible_interval",
-            "high_density_intervals",
+            "high_density_interval",
             "prob_being_best",
             "expected_loss",
             "posterior_samples"
