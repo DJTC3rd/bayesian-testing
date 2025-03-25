@@ -240,6 +240,7 @@ def exp_gamma_posteriors_all(
     """
     rng = np.random.default_rng(seed)
 
+    print("inside exp_gamma_post",totals[i] + a_priors_gamma[i],b_priors_gamma[i] / (1 + sums[i]*b_priors_gamma[i]))
     gamma_samples = np.array(
         [
             rng.gamma(
