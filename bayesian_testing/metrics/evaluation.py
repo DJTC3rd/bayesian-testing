@@ -590,6 +590,7 @@ def eval_exponential_agg(
     seed: int = None,
     min_is_best: bool = False,
     interval_alpha: float = 0.95,
+    for_revenue : bool = False,
 ) -> Tuple[List[float], List[float], List[List[float]]]:
     """
     Method estimating probabilities of being best, expected loss and credible intervals for
@@ -623,8 +624,8 @@ def eval_exponential_agg(
         b_priors_gamma = [0.1] * len(totals)
 
     gamma_samples_rate = exp_gamma_posteriors_all(
-        totals, sums, sim_count, a_priors_gamma, b_priors_gamma, seed
-    )
+            totals, sums, sim_count, a_priors_gamma, b_priors_gamma, seed, for_revenue
+        )
 
     # Reversing gamma samples to get from a rate to a scale.
     gamma_samples = np.reciprocal(gamma_samples_rate)
@@ -647,6 +648,7 @@ def eval_delta_exponential_agg(
     seed: int = None,
     min_is_best: bool = False,
     interval_alpha: float = 0.95,
+    for_revenue: bool = False,
     a_priors_beta: List[Number] = None,
     b_priors_beta: List[Number] = None,
 ) -> Tuple[List[float], List[float], List[List[float]]]:
@@ -686,9 +688,15 @@ def eval_delta_exponential_agg(
     if not b_priors_beta:
         b_priors_beta = [0.5] * len(totals)
 
-    gamma_samples_rate, testing = exp_gamma_posteriors_all(
-        non_zeros, sums, sim_count, a_priors_gamma, b_priors_gamma, seed
-    )
+    if for_revenue:
+        gamma_samples_rate = exp_gamma_posteriors_all(
+            non_zeros, sums, sim_count, a_priors_gamma, b_priors_gamma, seed, for_revenue
+        )
+    else:
+        gamma_samples_rate = exp_gamma_posteriors_all(
+            totals, sums, sim_count, a_priors_gamma, b_priors_gamma, seed, for_revenue
+        )
+
     beta_samples = beta_posteriors_all(
         totals, non_zeros, sim_count, a_priors_beta, b_priors_beta, seed
     )
@@ -704,4 +712,4 @@ def eval_delta_exponential_agg(
     res_intervals = estimate_credible_intervals(combined_samples, interval_alpha)
     res_hdis = estimate_hdi(combined_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples, testing
+    return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples

@@ -44,6 +44,7 @@ class ExponentialDataTest(BaseDataTest):
         seed: int = None,
         min_is_best: bool = False,
         interval_alpha: float = 0.95,
+        for_revenue : bool = False,
     ) -> Tuple[dict, dict, dict]:
         """
         Calculate probabilities of being best, expected loss and credible intervals for a current
@@ -62,7 +63,7 @@ class ExponentialDataTest(BaseDataTest):
         res_loss : Dictionary with expected loss for all variants in experiment.
         res_intervals : Dictionary with quantile-based credible intervals for all variants.
         """
-        pbbs, loss, intervals, hdis, posterior_samples, testing = eval_exponential_agg(
+        pbbs, loss, intervals, hdis, posterior_samples = eval_exponential_agg(
             self.totals,
             self.sum_values,
             self.a_priors,
@@ -71,6 +72,7 @@ class ExponentialDataTest(BaseDataTest):
             seed,
             min_is_best,
             interval_alpha,
+            for_revenue
         )
         res_pbbs = dict(zip(self.variant_names, pbbs))
         res_loss = dict(zip(self.variant_names, loss))
@@ -78,7 +80,7 @@ class ExponentialDataTest(BaseDataTest):
         res_hdis = dict(zip(self.variant_names, hdis))
         res_posterior= dict(zip(self.variant_names, posterior_samples))
 
-        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior, testing
+        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior
 
     def evaluate(
         self,
@@ -86,6 +88,7 @@ class ExponentialDataTest(BaseDataTest):
         seed: int = None,
         min_is_best: bool = False,
         interval_alpha: float = 0.95,
+        for_revenue : bool = False,
     ) -> List[dict]:
         """
         Evaluation of experiment.
@@ -118,8 +121,8 @@ class ExponentialDataTest(BaseDataTest):
             round((i[3] + i[1]) / (i[2] + i[0]), 5)
             for i in zip(self.totals, self.sum_values, self.a_priors, self.b_priors)
         ]
-        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior, testing = self.eval_simulation(
-            sim_count, seed, min_is_best, interval_alpha
+        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior = self.eval_simulation(
+            sim_count, seed, min_is_best, interval_alpha, for_revenue
         )
         pbbs = list(eval_pbbs.values())
         loss = list(eval_loss.values())
@@ -141,7 +144,7 @@ class ExponentialDataTest(BaseDataTest):
         ]
         res = [dict(zip(keys, item)) for item in zip(*data)]
 
-        return res, testing
+        return res
 
     def add_variant_data_agg(
         self,

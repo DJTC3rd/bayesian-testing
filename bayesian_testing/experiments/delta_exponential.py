@@ -48,7 +48,7 @@ class DeltaExponentialDataTest(BaseDataTest):
     
     @property
     def positives(self):
-        return [self.data[k]["positives"] for k in self.data]
+        return [self.data[k]["positives"] for k in self.data]  
 
     def eval_simulation(
         self,
@@ -56,6 +56,7 @@ class DeltaExponentialDataTest(BaseDataTest):
         seed: int = None,
         min_is_best: bool = False,
         interval_alpha: float = 0.95,
+        for_revenue : bool = False,
     ) -> Tuple[dict, dict, dict]:
         """
         Calculate probabilities of being best, expected loss and credible intervals for a current
@@ -84,6 +85,7 @@ class DeltaExponentialDataTest(BaseDataTest):
             seed,
             min_is_best,
             interval_alpha,
+            for_revenue,
             a_priors_beta=self.a_priors_beta,
             b_priors_beta=self.b_priors_beta,
         )
@@ -93,7 +95,6 @@ class DeltaExponentialDataTest(BaseDataTest):
         res_hdis = dict(zip(self.variant_names, hdis))
         res_posterior= dict(zip(self.variant_names, posterior_samples))
 
-
         return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior
 
     def evaluate(
@@ -102,6 +103,7 @@ class DeltaExponentialDataTest(BaseDataTest):
         seed: int = None,
         min_is_best: bool = False,
         interval_alpha: float = 0.95,
+        for_revenue : bool = False,
     ) -> List[dict]:
         """
         Evaluation of experiment.
@@ -142,7 +144,7 @@ class DeltaExponentialDataTest(BaseDataTest):
                         )
         ]
         eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior = self.eval_simulation(
-            sim_count, seed, min_is_best, interval_alpha
+            sim_count, seed, min_is_best, interval_alpha, for_revenue
         )
         pbbs = list(eval_pbbs.values())
         loss = list(eval_loss.values())

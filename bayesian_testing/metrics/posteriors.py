@@ -221,6 +221,7 @@ def exp_gamma_posteriors_all(
     a_priors_gamma: List[Union[float, int]],
     b_priors_gamma: List[Union[float, int]],
     seed: Union[int, np.random.bit_generator.SeedSequence] = None,
+    for_revenue: bool = False
 ) -> np.ndarray:
     """
     Draw from Gamma posterior distributions for all variants of Exponential data at once.
@@ -233,6 +234,7 @@ def exp_gamma_posteriors_all(
     a_priors_gamma : List of prior alpha parameters of Gamma distributions for each variant.
     b_priors_gamma : List of prior beta parameters (rates) of Gamma distributions for each variant.
     seed : Random seed.
+    for_revenue : in cases where exponential is used for revenue. Match popular prior calculations
 
     Returns
     -------
@@ -240,17 +242,30 @@ def exp_gamma_posteriors_all(
     """
     rng = np.random.default_rng(seed)
 
-    testing = [totals[i] + a_priors_gamma[i],b_priors_gamma[i] / (1 + sums[i]*b_priors_gamma[i]))]
-    gamma_samples = np.array(
-        [
-            rng.gamma(
-                totals[i] + a_priors_gamma[i],
-                # here it has to be 1/(...) as it is a scale, and not a rate
-                # 1 / (sums[i] + b_priors_gamma[i]),
-                b_priors_gamma[i] / (1 + sums[i]*b_priors_gamma[i]),
-                sim_count,
-            )
-            for i in range(len(totals))
-        ]
-    )
-    return gamma_samples, testing
+    if for_revenue: 
+        gamma_samples = np.array(
+            [
+                rng.gamma(
+                    totals[i] + a_priors_gamma[i],
+                    # here it has to be 1/(...) as it is a scale, and not a rate
+                    b_priors_gamma[i] / (1 + sums[i]*b_priors_gamma[i]),
+                    sim_count,
+                )
+                for i in range(len(totals))
+            ]
+        )
+    else:
+        gamma_samples = np.array(
+            [
+                rng.gamma(
+                    totals[i] + a_priors_gamma[i],
+                    # here it has to be 1/(...) as it is a scale, and not a rate
+                    # 1 / (sums[i] + b_priors_gamma[i]),
+                    1 / (sums[i] + b_priors_gamma[i]),
+                    sim_count,
+                )
+                for i in range(len(totals))
+            ]
+        )
+    
+    return gamma_samples
