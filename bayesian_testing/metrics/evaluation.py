@@ -687,7 +687,7 @@ def eval_delta_exponential_agg(
         b_priors_beta = [0.5] * len(totals)
 
     gamma_samples_rate = exp_gamma_posteriors_all(
-        totals, sums, sim_count, a_priors_gamma, b_priors_gamma, seed
+        non_zeros, sums, sim_count, a_priors_gamma, b_priors_gamma, seed
     )
     beta_samples = beta_posteriors_all(
         totals, non_zeros, sim_count, a_priors_beta, b_priors_beta, seed
