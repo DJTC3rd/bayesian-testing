@@ -62,7 +62,7 @@ class ExponentialDataTest(BaseDataTest):
         res_loss : Dictionary with expected loss for all variants in experiment.
         res_intervals : Dictionary with quantile-based credible intervals for all variants.
         """
-        pbbs, loss, intervals, hdis, posterior_samples = eval_exponential_agg(
+        pbbs, loss, intervals, hdis, posterior_samples, testing = eval_exponential_agg(
             self.totals,
             self.sum_values,
             self.a_priors,
@@ -78,7 +78,7 @@ class ExponentialDataTest(BaseDataTest):
         res_hdis = dict(zip(self.variant_names, hdis))
         res_posterior= dict(zip(self.variant_names, posterior_samples))
 
-        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior
+        return res_pbbs, res_loss, res_intervals, res_hdis, res_posterior, testing
 
     def evaluate(
         self,
@@ -118,7 +118,7 @@ class ExponentialDataTest(BaseDataTest):
             round((i[3] + i[1]) / (i[2] + i[0]), 5)
             for i in zip(self.totals, self.sum_values, self.a_priors, self.b_priors)
         ]
-        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior = self.eval_simulation(
+        eval_pbbs, eval_loss, eval_intervals, eval_hdis, eval_posterior, testing = self.eval_simulation(
             sim_count, seed, min_is_best, interval_alpha
         )
         pbbs = list(eval_pbbs.values())
@@ -141,7 +141,7 @@ class ExponentialDataTest(BaseDataTest):
         ]
         res = [dict(zip(keys, item)) for item in zip(*data)]
 
-        return res
+        return res, testing
 
     def add_variant_data_agg(
         self,

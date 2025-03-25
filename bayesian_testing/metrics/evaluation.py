@@ -686,7 +686,7 @@ def eval_delta_exponential_agg(
     if not b_priors_beta:
         b_priors_beta = [0.5] * len(totals)
 
-    gamma_samples_rate = exp_gamma_posteriors_all(
+    gamma_samples_rate, testing = exp_gamma_posteriors_all(
         non_zeros, sums, sim_count, a_priors_gamma, b_priors_gamma, seed
     )
     beta_samples = beta_posteriors_all(
@@ -704,4 +704,4 @@ def eval_delta_exponential_agg(
     res_intervals = estimate_credible_intervals(combined_samples, interval_alpha)
     res_hdis = estimate_hdi(combined_samples, interval_alpha)
 
-    return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples
+    return res_pbbs, res_loss, res_intervals, res_hdis, combined_samples, testing
