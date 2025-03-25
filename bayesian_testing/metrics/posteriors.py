@@ -245,7 +245,8 @@ def exp_gamma_posteriors_all(
             rng.gamma(
                 totals[i] + a_priors_gamma[i],
                 # here it has to be 1/(...) as it is a scale, and not a rate
-                1 / (sums[i] + b_priors_gamma[i]),
+                # 1 / (sums[i] + b_priors_gamma[i]),
+                b_priors_gamma[i] / (1 + sums[i]*b_priors_gamma[i]),
                 sim_count,
             )
             for i in range(len(totals))
